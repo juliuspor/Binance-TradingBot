@@ -13,8 +13,6 @@ if not API_KEY or not API_SECRET:
 
 client = Client(API_KEY, API_SECRET, testnet=True)
 
-# print(client.get_account())
-
 symbol = "BTCUSDT"
 
 
