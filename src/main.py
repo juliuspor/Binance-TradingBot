@@ -1,29 +1,19 @@
-import os
+"""
+Binance Trading Bot entry point to automate trading decisions based on trump truth social posts.
+"""
 
 from binance.client import Client
-from dotenv import load_dotenv
 
-load_dotenv()
+import config
+from bot.trader import get_price, place_buy_order
+from scraper import fetch__n_latest_posts
 
-API_KEY = os.getenv("BINANCE_API_KEY")
-API_SECRET = os.getenv("BINANCE_SECRET_KEY")
+client = Client(config.BINANCE_API_KEY, config.BINANCE_SECRET_KEY, testnet=True)
 
-if not API_KEY or not API_SECRET:
-    raise ValueError("API Key or Secret Key is missing")
+print(get_price(client, config.SYMBOL))
+print(place_buy_order(client, config.SYMBOL, 0.001))
 
-client = Client(API_KEY, API_SECRET, testnet=True)
-
-symbol = "BTCUSDT"
-
-
-def get_price():
-    return float(client.get_symbol_ticker(symbol=symbol)["price"])
-
-
-def place_buy_order(symbol, quantity):
-    order = client.order_market_buy(symbol=symbol, quantity=0.001)
-    print("buy order done: ", order)
-
-
-print(get_price())
-print(place_buy_order(symbol, 0.001))
+latest_posts = fetch__n_latest_posts("realDonaldTrump", 4)
+for latest_post in latest_posts:
+    latest_post_text = latest_post.get("content", "").strip()
+    print(latest_post_text)
