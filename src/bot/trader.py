@@ -1,28 +1,26 @@
-def get_price(client, symbol):
-    """
-    Returns the current price of the specified symbol (currency).
+class Trader:
+    def __init__(self, client, symbol="BTCUSDT"):
+        self.client = client
+        self.symbol = symbol
 
-    Args:
-        client: Binance client instance
-        symbol (str): Trading pair symbol (e.g., 'BTCUSDT')
+    def get_price(self):
+        """
+        Returns the current price of the specified symbol (currency).
 
-    Returns:
-        price as float
-    """
-    return float(client.get_symbol_ticker(symbol=symbol)["price"])
+        Returns:
+            price as float
+        """
+        return float(self.client.get_symbol_ticker(symbol=self.symbol)["price"])
 
+    def place_buy_order(self, quantity):
+        """
+        Places a market buy order for the instances symbol and quantity.
 
-def place_buy_order(client, symbol, quantity):
-    """
-    Places a market buy order for the specified symbol and quantity.
+        Args:
+            quantity (float): Amount to buy
 
-    Args:
-        client: Binance client instance
-        symbol (str): Trading pair symbol (e.g., 'BTCUSDT')
-        quantity (float): Amount to buy
-
-    Returns:
-        dict: Order information returned by Binance API
-    """
-    order = client.order_market_buy(symbol=symbol, quantity=quantity)
-    print("buy order done: ", order)
+        Returns:
+            dict: Order information returned by Binance API
+        """
+        order = self.client.order_market_buy(symbol=self.symbol, quantity=quantity)
+        print("buy order done: ", order)
