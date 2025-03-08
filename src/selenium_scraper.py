@@ -6,7 +6,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-import config
 from base_scraper import BaseScraper
 
 
@@ -14,6 +13,9 @@ class SeleniumScraper(BaseScraper):
     """
     Scrapes Truth Social posts using Selenium.
     """
+
+    def __init__(self, scroll_pause_seconds=2):
+        self.scroll_pause_seconds = scroll_pause_seconds
 
     def fetch_latest_posts(self, username):
         """
@@ -46,12 +48,12 @@ class SeleniumScraper(BaseScraper):
             driver.get(url)
 
             scroll_amount = 200
-            time.sleep(config.SCROLL_PAUSE_SEC)
+            time.sleep(self.scroll_pause_seconds)
 
             # Scroll n times to load more posts
             for i in range(5):
                 driver.execute_script(f"window.scrollBy(0, {scroll_amount});")
-                time.sleep(config.SCROLL_PAUSE_SEC)
+                time.sleep(self.scroll_pause_seconds)
 
             # Iterate through each container and get the immediate child with aria-label (The posts text)
             status_elements = driver.find_elements(

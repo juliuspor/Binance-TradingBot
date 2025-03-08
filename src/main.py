@@ -27,7 +27,7 @@ def main():
 
     print(trader.get_price())
 
-    seleniumScraper = SeleniumScraper()
+    seleniumScraper = SeleniumScraper(scroll_pause_seconds=config.SCROLL_PAUSE_SEC)
 
     selenium_tweets = seleniumScraper.fetch_latest_posts(config.USERNAME)
 
