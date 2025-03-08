@@ -15,5 +15,5 @@ Automated trading bot that:
 git clone https://github.com/yourusername/Binance-TradingBot.git
 cd Binance-TradingBot
 pip install -r requirements.txt
-python main.py
+python src/main.py
 ```

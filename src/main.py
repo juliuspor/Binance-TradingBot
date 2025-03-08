@@ -4,8 +4,8 @@ from binance.client import Client
 
 import config
 from bot.trader import Trader
-from selenium_scraper import SeleniumScraper
-from truthbrush_scraper import TruthBrushScraper
+from scraper.selenium_scraper import SeleniumScraper
+from scraper.truthbrush_scraper import TruthBrushScraper
 
 
 def main():
