@@ -10,9 +10,9 @@ TRUTHSOCIAL_USERNAME = os.getenv("TRUTHSOCIAL_USERNAME")
 TRUTHSOCIAL_PASSWORD = os.getenv("TRUTHSOCIAL_PASSWORD")
 
 SCROLL_PAUSE_SEC = 3
+USERNAME = "realDonaldTrump"
 
 SYMBOL = "BTCUSDT"
-
 
 if not BINANCE_API_KEY or not BINANCE_SECRET_KEY:
     raise ValueError("API Key or Secret Key is missing")
