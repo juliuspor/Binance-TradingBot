@@ -6,7 +6,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-from base_scraper import BaseScraper
+from scraper.base_scraper import BaseScraper  # pylint: disable=import-error
 
 
 class SeleniumScraper(BaseScraper):

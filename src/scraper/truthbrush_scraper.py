@@ -2,7 +2,7 @@ import json
 import re
 import subprocess
 
-from base_scraper import BaseScraper
+from scraper.base_scraper import BaseScraper  # pylint: disable=import-error
 
 
 class TruthBrushScraper(BaseScraper):

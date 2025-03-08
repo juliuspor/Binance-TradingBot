@@ -12,4 +12,3 @@ class BaseScraper(ABC):
         Fetches the latest posts for a given username.
         Must be implemented by subclasses.
         """
-        pass
