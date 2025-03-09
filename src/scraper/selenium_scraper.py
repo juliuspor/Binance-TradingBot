@@ -1,6 +1,12 @@
 import time
 
 from selenium import webdriver
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    StaleElementReferenceException,
+    TimeoutException,
+    WebDriverException,
+)
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -51,7 +57,7 @@ class SeleniumScraper(BaseScraper):
             time.sleep(self.scroll_pause_seconds)
 
             # Scroll n times to load more posts
-            for i in range(5):
+            for _ in range(5):
                 driver.execute_script(f"window.scrollBy(0, {scroll_amount});")
                 time.sleep(self.scroll_pause_seconds)
 
@@ -70,20 +76,31 @@ class SeleniumScraper(BaseScraper):
             all_tweets = []
             for status in status_elements:
                 try:
-                    # Get the direct child element that holds the tweet text
+                    # Extract the aria-label attribute (contains all post info)
                     tweet_elem = status.find_element(By.XPATH, "./div[@aria-label]")
                     tweet_text = tweet_elem.get_attribute("aria-label").strip()
+
+                    # Enrich timestamp information for json parsing
                     if tweet_text:
-                        all_tweets.append(tweet_text)
-                except Exception as e:
-                    # If no direct child with aria-label is found, skip this post
-                    print("Error, no aria-label found for this post", e)
+                        all_tweets.append(
+                            {
+                                "username": username,
+                                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                                "content": tweet_text,
+                            }
+                        )
+                except (
+                    AttributeError,
+                    NoSuchElementException,
+                    StaleElementReferenceException,
+                ) as e:
+                    print("Error extracting post data: ", e)
                     continue
 
             return all_tweets if all_tweets else None
 
-        except Exception as e:
-            print("Error:", e)
+        except (TimeoutException, WebDriverException, NoSuchElementException) as e:
+            print("Error trying to scrape the site: ", e)
             return None
         finally:
             driver.quit()

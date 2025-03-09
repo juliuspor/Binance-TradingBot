@@ -14,12 +14,10 @@ def main():
     Entry point of the application.
 
     This function initializes a Trader instance with the Binance API client,
-    fetches the current price of the configured symbol, initializes a SeleniumScraper,
-    and uses it to fetch latest posts from a configured Twitter/X username.
+    fetches the current price of the configured symbol (eg. ETH/USDT), initializes a SeleniumScraper,
+    and uses it to fetch latest posts from a TruthSocial account.
     The fetched tweets are then saved to a JSON file.
 
-    Returns:
-        None
     """
     trader = Trader(
         client=Client(config.BINANCE_API_KEY, config.BINANCE_SECRET_KEY, testnet=True),
