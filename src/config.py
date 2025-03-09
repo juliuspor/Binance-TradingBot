@@ -11,7 +11,6 @@ TRUTHSOCIAL_PASSWORD = os.getenv("TRUTHSOCIAL_PASSWORD")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 SCROLL_PAUSE_SEC = 3
-USERNAME = "realDonaldTrump"
 
 if not BINANCE_API_KEY or not BINANCE_SECRET_KEY:
-    raise ValueError("API Key or Secret Key is missing")
+    raise ValueError("Binance API Key or Binance Secret Key is missing")

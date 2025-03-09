@@ -24,7 +24,10 @@ class TradingSignalAnalyzer:
 
         The result dictionary is stored in the `result` member variable.
         """
-        client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+        api_key = os.environ.get("GROQ_API_KEY")
+        if not api_key:
+            raise ValueError("GROQ_API_KEY environment variable is not set.")
+        client = Groq(api_key=api_key)
 
         # Constructing a structured prompt
         prompt = (

@@ -14,15 +14,12 @@ def main():
 
      This function initializes a SeleniumScraper to fetch latest posts from a configured
      TruthSocial account. For each post, it:
-     1. Temporarily sets the post content to a predefined Bitcoin investment message
-     2. Analyzes the trading signal using TradingSignalAnalyzer
-     3. Initializes a Trader instance with Binance API in testnet mode
-     4. Retrieves and displays the current price of the detected trading pair
-
-     Finally, it saves the fetched posts to a JSON file named 'tweets.json' if any were found.
+     1. Analyzes the trading signal using TradingSignalAnalyzer
+     2. Initializes a Trader instance with Binance API
+     3. Retrieves and displays the current price of the detected trading pair
     """
     selenium_scraper = SeleniumScraper(scroll_pause_seconds=config.SCROLL_PAUSE_SEC)
-    truthsocial_posts = selenium_scraper.fetch_latest_posts(config.USERNAME)
+    truthsocial_posts = selenium_scraper.fetch_latest_posts("realDonaldTrump")
 
     if truthsocial_posts:
         for post in truthsocial_posts:
