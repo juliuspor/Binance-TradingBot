@@ -4,6 +4,7 @@ from binance.client import Client
 
 import config
 from bot.trader import Trader
+from bot.trading_signal_analyzer import TradingSignalAnalyzer
 from scraper.selenium_scraper import SeleniumScraper
 
 # from scraper.truthbrush_scraper import TruthBrushScraper
@@ -26,15 +27,21 @@ def main():
 
     print(trader.get_price())
 
-    seleniumScraper = SeleniumScraper(scroll_pause_seconds=config.SCROLL_PAUSE_SEC)
+    selenium_scraper = SeleniumScraper(scroll_pause_seconds=config.SCROLL_PAUSE_SEC)
 
-    selenium_tweets = seleniumScraper.fetch_latest_posts(config.USERNAME)
+    selenium_posts = selenium_scraper.fetch_latest_posts(config.USERNAME)
 
-    if selenium_tweets:
+    if selenium_posts:
+        for post in selenium_posts:
+            sentiment_analyzer = TradingSignalAnalyzer(post)
+            sentiment_analyzer.analyze_signal()
+            print(sentiment_analyzer.result)
+
+    if selenium_posts:
         try:
             with open("tweets.json", "w", encoding="utf-8") as f:
-                json.dump(selenium_tweets, f, indent=4, ensure_ascii=False)
-            print(f"Saved {len(selenium_tweets)} tweets to tweets.json")
+                json.dump(selenium_posts, f, ensure_ascii=False, indent=4)
+            print(f"Saved {len(selenium_posts)} tweets to tweets.json")
         except IOError as e:
             print("Error writing to file:", e)
     else:

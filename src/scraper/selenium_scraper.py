@@ -35,7 +35,7 @@ class SeleniumScraper(BaseScraper):
         Returns:
             list or None: List of post texts, or None if no posts found/error occurred
         """
-        print(f"Selenium scraper: fetching the latest {username} Posts")
+        print(f"Selenium scraper: fetching the latest {username} TruthSocial Posts")
 
         url = f"https://truthsocial.com/@{username}"
         chrome_options = Options()
@@ -57,7 +57,7 @@ class SeleniumScraper(BaseScraper):
             time.sleep(self.scroll_pause_seconds)
 
             # Scroll n times to load more posts
-            for _ in range(5):
+            for _ in range(2):
                 driver.execute_script(f"window.scrollBy(0, {scroll_amount});")
                 time.sleep(self.scroll_pause_seconds)
 
@@ -71,7 +71,7 @@ class SeleniumScraper(BaseScraper):
                 print(
                     "No tweets found. The CSS selectors might have changed or cloudflare is doing blocking."
                 )
-                return None
+                return []
 
             all_tweets = []
             for status in status_elements:
@@ -97,10 +97,10 @@ class SeleniumScraper(BaseScraper):
                     print("Error extracting post data: ", e)
                     continue
 
-            return all_tweets if all_tweets else None
+            return all_tweets if all_tweets else []
 
         except (TimeoutException, WebDriverException, NoSuchElementException) as e:
             print("Error trying to scrape the site: ", e)
-            return None
+            return []
         finally:
             driver.quit()
