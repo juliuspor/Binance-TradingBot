@@ -22,20 +22,21 @@ def main():
     truthsocial_posts = selenium_scraper.fetch_latest_posts("realDonaldTrump")
 
     if truthsocial_posts:
-        for post in truthsocial_posts:
-            post["content"] = (
-                "You should invest in BTC for sure guys. It's the future. #BTC #Bitcoin"
-            )
-            sentiment_analyzer = TradingSignalAnalyzer(post)
-            sentiment_analyzer.analyze_signal()
+        latest_post = truthsocial_posts[0]  # latest post
+        latest_post["content"] = (
+            "You should invest in BTC for sure guys. It's the future. #BTC #Bitcoin"
+        )
+        sentiment_analyzer = TradingSignalAnalyzer(latest_post)
+        sentiment_analyzer.analyze_signal()
 
-            trader = Trader(
-                client=Client(
-                    config.BINANCE_API_KEY, config.BINANCE_SECRET_KEY, testnet=True
-                ),
-                symbol=sentiment_analyzer.trading_pair,
-            )
-            print(trader.get_price())
+        trader = Trader(
+            client=Client(
+                config.BINANCE_API_KEY, config.BINANCE_SECRET_KEY, testnet=True
+            ),
+            symbol=sentiment_analyzer.trading_pair,
+        )
+        print(trader.get_price())
+        print(trader.place_buy_order(0.001))
 
 
 if __name__ == "__main__":
