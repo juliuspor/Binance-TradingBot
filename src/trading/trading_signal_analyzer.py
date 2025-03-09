@@ -20,7 +20,7 @@ class TradingSignalAnalyzer:
 
     def analyze_signal(self):
         """
-        Uses Groq's Llama API to extract a crypto trading pair and determine if the post suggests:
+        Uses Groq's Llama API to extract a crypto trading pair and determine if the post suggests: LONG, SHORT, or NO TRADE.
 
         The result dictionary is stored in the `result` member variable.
         """
