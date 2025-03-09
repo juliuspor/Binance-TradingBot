@@ -14,17 +14,15 @@ class TradingSignalAnalyzer:
 
     def __init__(self, post):
         self.post = post
-        self.result = None
+        self.trading_pair = None
+        self.trade_signal = None
+        self.reason = None
 
     def analyze_signal(self):
         """
         Uses Groq's Llama API to extract a crypto trading pair and determine if the post suggests:
-        - LONG (bullish sentiment, buy signal)
-        - SHORT (bearish sentiment, sell signal)
-        - NO TRADE (neutral sentiment or no trade recommendation)
-        - IRRELEVANT (if no crypto pair is mentioned)
 
-        The result is stored in the `result` member variable.
+        The result dictionary is stored in the `result` member variable.
         """
         client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
@@ -37,7 +35,7 @@ class TradingSignalAnalyzer:
             "Respond in the following JSON format:\n"
             "```json\n"
             "{"
-            '  "trading_pair": "BTCUSDT/ETHUSD/IRRELEVANT",'
+            '  "trading_pair": "BTCUSDT/ETHUSDT/TRUMPUSDT/IRRELEVANT",'
             '  "trade_signal": "LONG/SHORT/NO TRADE",'
             '  "reason": "<10 word reason explaining the reasoning for the trade signal."'
             "}"
@@ -45,7 +43,7 @@ class TradingSignalAnalyzer:
 
         try:
             chat_completion = client.chat.completions.create(
-                model="llama3-70b-8192",
+                model="gemma2-9b-it",
                 messages=[
                     {"role": "user", "content": prompt},
                     {
@@ -60,25 +58,13 @@ class TradingSignalAnalyzer:
 
             # Parse response as JSON
             try:
-                signal_data = json.loads(response)
+                json_response = json.loads(response)
+                self.trading_pair = json_response.get("trading_pair", "IRRELEVANT")
+                self.trade_signal = json_response.get("trade_signal", "NO TRADE")
+                self.reason = json_response.get("reason", "No reason provided.")
+
             except json.JSONDecodeError as e:
                 print("Could not extract structured data from LLM response: ", e)
-                self.result = {
-                    "trading_pair": "IRRELEVANT",
-                    "trade_signal": "NO TRADE",
-                    "reason": "Could not extract structured data.",
-                }
-
-            self.result = {
-                "trading_pair": signal_data.get("trading_pair", "IRRELEVANT"),
-                "trade_signal": signal_data.get("trade_signal", "NO TRADE"),
-                "reason": signal_data.get("reason", "No reason provided."),
-            }
 
         except Exception as e:
             print("Error analyzing trading signal: ", e)
-            self.result = {
-                "trading_pair": "IRRELEVANT",
-                "trade_signal": "Error",
-                "reason": str(e),
-            }
