@@ -24,7 +24,7 @@ def main():
     if truthsocial_posts:
         latest_post = truthsocial_posts[0]  # latest post
         latest_post["content"] = (
-            "You should invest in BTC for sure guys. It's the future. #BTC #Bitcoin"
+            "You should invest in BTC for sure guys. It's the future. #BTC #Bitcoin"  # placeholder
         )
         sentiment_analyzer = TradingSignalAnalyzer(latest_post)
         sentiment_analyzer.analyze_signal()
