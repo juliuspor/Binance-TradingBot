@@ -7,20 +7,18 @@ from scraper.base_scraper import BaseScraper  # pylint: disable=import-error
 
 class TruthBrushScraper(BaseScraper):
     """
-    Fetches posts using the 'truthbrush' CLI tool.
+    Scrapes TruthSocial posts using the 'truthbrush' CLI tool.
     """
 
     def fetch_latest_posts(self, username):
         """
-        Fetch the latest posts from Truth Social for a given username.
-
         Uses 'truthbrush' to retrieve posts and parses the JSON output.
 
         Args:
             username (str): Truth Social username
 
         Returns:
-            list: Up to 4 most recent posts as dictionaries, or None if failed
+            list: Most recent posts as dictionaries, or None if failed
         """
         print(f"TruthBrush scraper: fetching the latest {username} Posts")
 
