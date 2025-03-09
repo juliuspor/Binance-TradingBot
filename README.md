@@ -1,10 +1,9 @@
 # Binance Trading Bot
 
 Automated cryptocurrency trading bot that:
-- Scrapes Donald Trump's posts from Truth Social using `truthbrush` or `Selenium` 
+- Scrapes Donald Trump's posts from Truth Social using either `truthbrush` or `Selenium` (You can choose)
 - Analyzes trading signal with Groq's API (Different LLMs possible)
-- Executes trades on Binance based on sentiment analysis
-- Sends notification alerts about trades via email/Telegram
+- Executes trades on Binance testnet based on LLM trading signal analysis
 
 ## Requirements
 - Python 3.9+
