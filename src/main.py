@@ -1,9 +1,9 @@
 from binance.client import Client
 
 import config
-from bot.trader import Trader
-from bot.trading_signal_analyzer import TradingSignalAnalyzer
 from scraper.selenium_scraper import SeleniumScraper
+from trading.trader import Trader
+from trading.trading_signal_analyzer import TradingSignalAnalyzer
 
 # from scraper.truthbrush_scraper import TruthBrushScraper
 
