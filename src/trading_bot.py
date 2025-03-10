@@ -1,4 +1,5 @@
 from binance.client import Client
+from binance.exceptions import BinanceAPIException, BinanceOrderException
 
 import config
 from repository.post_repository import PostRepository
@@ -39,7 +40,6 @@ class TradingBot:
             return
         sentiment_analyzer = TradingSignalAnalyzer(post)
         sentiment_analyzer.analyze_signal()
-
         try:
             trader = Trader(
                 client=Client(
@@ -55,11 +55,14 @@ class TradingBot:
 
             if sentiment_analyzer.trade_signal == "LONG":
                 trader.place_buy_order(0.01)
-                print("Buy order placed.")
             elif sentiment_analyzer.trade_signal == "SHORT":
                 trader.place_sell_order(0.01)
-                print("Sell order placed.")
-        except Exception as e:
+        except (BinanceAPIException, BinanceOrderException) as e:
+            print(f"Error executing trade: {e}")
+        except ConnectionError as e:
+            print(f"Connection error during trade execution: {e}")
+        except ValueError as e:
+            print(f"Value error in trade parameters: {e}")
             print(f"Error executing trade: {e}")
         finally:
             self.post_repository.mark_post_as_processed(post)
