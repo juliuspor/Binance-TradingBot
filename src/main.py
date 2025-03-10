@@ -1,4 +1,13 @@
+import time
+
+import schedule
+
 from trading_bot import TradingBot
+
+
+def job():
+    bot = TradingBot()
+    bot.run()
 
 
 def main():
@@ -13,8 +22,15 @@ def main():
      5. Places a buy order for a small quantity
      6. Marks the post as processed
     """
-    bot = TradingBot()
-    bot.run()
+    # Run immediately once
+    job()
+
+    # Then schedule to run every 10 seconds
+    schedule.every(10).seconds.do(job)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 
 if __name__ == "__main__":

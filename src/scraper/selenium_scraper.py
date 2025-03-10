@@ -1,4 +1,6 @@
 import hashlib
+import os
+import platform
 import time
 
 from selenium import webdriver
@@ -24,6 +26,11 @@ class SeleniumScraper(BaseScraper):
     def __init__(self, scroll_pause_seconds=2):
         self.scroll_pause_seconds = scroll_pause_seconds
 
+    def _is_running_in_docker(self):
+        """Check if the code is running inside a Docker container."""
+        # Check for .dockerenv file
+        return os.path.exists("/.dockerenv") or os.environ.get("DOCKER_CONTAINER")
+
     def fetch_latest_posts(self, username):
         """
         Scrapes recent posts from a Truth Social profile using Selenium.
@@ -38,20 +45,48 @@ class SeleniumScraper(BaseScraper):
         """
         print(f"Selenium scraper: fetching the latest {username} TruthSocial Posts")
 
+        # Configure ChromeDriver for both Docker and local environments
         url = f"https://truthsocial.com/@{username}"
         chrome_options = Options()
         chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")  # Required in Docker
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-dev-shm-usage")  # Required in Docker
         # circumvent cloudflare blocking
         chrome_options.add_argument(
             "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
             "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6998.45 Safari/537.36"
         )
 
-        driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=chrome_options
-        )
+        # Debug information
+        is_docker = self._is_running_in_docker()
+        print(f"Running in Docker: {is_docker}")
+
+        if is_docker:
+            # In Docker: use the system chromedriver directly without WebDriverManager
+            print("Using system ChromeDriver in Docker")
+            # Check if chromedriver exists at the expected path
+            chromedriver_path = "/usr/bin/chromedriver"
+            if os.path.exists(chromedriver_path):
+                print(f"ChromeDriver found at {chromedriver_path}")
+            else:
+                print(f"Warning: ChromeDriver not found at {chromedriver_path}")
+                # Try alternative location
+                chromedriver_path = "/usr/lib/chromium/chromedriver"
+                print(f"Trying alternative path: {chromedriver_path}")
+
+            service = Service(executable_path=chromedriver_path)
+            chrome_options.binary_location = "/usr/bin/chromium"
+        else:
+            # On local machine: use WebDriverManager
+            print("Using WebDriverManager for local development")
+            service = Service(ChromeDriverManager().install())
 
         try:
+            # Create the driver with appropriate options
+            driver = webdriver.Chrome(service=service, options=chrome_options)
+
+            # Continue with the rest of your scraping code...
             driver.get(url)
 
             scroll_amount = 200
@@ -108,4 +143,7 @@ class SeleniumScraper(BaseScraper):
             print("Error trying to scrape the site: ", e)
             return []
         finally:
-            driver.quit()
+            try:
+                driver.quit()
+            except:
+                pass

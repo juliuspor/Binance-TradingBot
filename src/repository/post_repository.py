@@ -8,7 +8,7 @@ class PostRepository:
     Repository for storing and retrieving processed posts to prevent duplicate processing.
     """
 
-    def __init__(self, storage_path="processed_posts.json"):
+    def __init__(self, storage_path="data/processed_posts.json"):
         """
         Initialize the repository with the path to the storage file.
 
@@ -16,6 +16,8 @@ class PostRepository:
             storage_path (str): Path to the JSON file for storing processed posts
         """
         self.storage_path = storage_path
+        os.makedirs(os.path.dirname(self.storage_path), exist_ok=True)
+
         self.processed_posts = self._load_processed_posts()
 
     def _load_processed_posts(self):
