@@ -25,7 +25,7 @@ def main():
     # Run immediately once
     job()
 
-    # Then schedule to run every 10 seconds
+    # Then schedule to run every n seconds
     schedule.every(60).seconds.do(job)
 
     while True:
