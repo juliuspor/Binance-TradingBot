@@ -1,5 +1,6 @@
 import json
 import os
+import re
 
 from groq import Groq
 
@@ -59,7 +60,9 @@ class TradingSignalAnalyzer:
 
             response = chat_completion.choices[0].message.content.strip()
 
-            # Parse response as JSON
+            # Remove escape characters and non-ASCII characters
+            response = response.encode().decode("unicode_escape")
+            response = re.sub(r"[^\x00-\x7F]+", "", response)
             try:
                 json_response = json.loads(response)
                 self.trading_pair = json_response.get("trading_pair", "IRRELEVANT")
