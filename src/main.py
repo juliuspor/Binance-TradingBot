@@ -26,7 +26,7 @@ def main():
     job()
 
     # Then schedule to run every 10 seconds
-    schedule.every(10).seconds.do(job)
+    schedule.every(60).seconds.do(job)
 
     while True:
         schedule.run_pending()
