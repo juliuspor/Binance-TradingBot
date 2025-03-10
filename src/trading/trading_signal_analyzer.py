@@ -46,7 +46,7 @@ class TradingSignalAnalyzer:
 
         try:
             chat_completion = client.chat.completions.create(
-                model="gemma2-9b-it",
+                model="llama-3.3-70b-versatile",
                 messages=[
                     {"role": "user", "content": prompt},
                     {

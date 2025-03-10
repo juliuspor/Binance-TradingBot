@@ -1,3 +1,4 @@
+import hashlib
 import time
 
 from selenium import webdriver
@@ -79,11 +80,15 @@ class SeleniumScraper(BaseScraper):
                     # Extract the aria-label attribute (contains all post info)
                     tweet_elem = status.find_element(By.XPATH, "./div[@aria-label]")
                     tweet_text = tweet_elem.get_attribute("aria-label").strip()
+                    # tweet_text = "BUY BITCOIN NOW"
+                    content_hash = hashlib.md5(f"{tweet_text}".encode()).hexdigest()
+                    post_id = f"{content_hash}"
 
                     # Enrich timestamp information for json parsing
                     if tweet_text:
                         all_tweets.append(
                             {
+                                "id": post_id,
                                 "username": username,
                                 "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
                                 "content": tweet_text,
