@@ -49,7 +49,7 @@ class TradingBot:
             )
             if sentiment_analyzer.trade_signal not in ["LONG", "SHORT"]:
                 print(
-                    "No crypto trading relevance detected, skipping this TruthSocial Post."
+                    f"No crypto relevance detected. Skipping: {post['content'][:60]}, {"..."}"
                 )
                 return
 
