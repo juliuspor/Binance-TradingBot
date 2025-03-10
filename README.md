@@ -3,11 +3,10 @@
 LLM-powered crypto trading bot that trades based on Donald Trump's Truth Social posts.
 
 ## What it does
-- Scrapes Trump's Truth Social posts in real-time using Selenium
-- Analyzes posts for crypto-related content and sentiment using Groq's LLM API
-- Generates trading signals (LONG/SHORT) based on the sentiment analysis
-- Executes trades on Binance when actionable signals are detected
-- Tracks performance and prevents duplicate processing of posts
+- Scrapes Trump's Truth Social posts using Selenium
+- Analyzes the latest post for crypto-related content/sentiment using Groq's LLM API
+- Generates trading signals (LONG/SHORT) based on the LLMs analysis
+- Executes trades on Binance based on the trading signals
 - Runs on a 60-second polling schedule to check for new posts
 
 ## Quick start
