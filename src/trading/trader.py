@@ -19,28 +19,33 @@ class Trader:
     def place_buy_order(self, quantity):
         """
         Places a market buy order for the instances symbol and quantity.
-
-        Returns:
-            dict: Order information returned by Binance API
         """
         order = self.client.order_market_buy(symbol=self.symbol, quantity=quantity)
-        print("buy order done: ", order)
+        print(
+            "Buy order executed: ",
+            order["symbol"],
+            " at ",
+            self.get_price(),
+            " quantity: ",
+            quantity,
+        )
         # Log the trade metrics
         self.log_trade_metrics(order)
-        return order
 
     def place_sell_order(self, quantity):
         """
         Places a market sell order for the instances symbol and quantity.
-
-        Returns:
-            dict: Order information returned by Binance API
         """
         order = self.client.order_market_sell(symbol=self.symbol, quantity=quantity)
-        print("sell order done: ", order)
-        # Log the trade metrics
+        print(
+            "Sell order executed: ",
+            order["symbol"],
+            " at ",
+            self.get_price(),
+            " quantity: ",
+            quantity,
+        )
         self.log_trade_metrics(order)
-        return order
 
     def log_trade_metrics(self, trade_data):
         """Log trade metrics for monitoring"""
@@ -53,12 +58,11 @@ class Trader:
                             "trade_id": trade_data["orderId"],
                             "symbol": trade_data["symbol"],
                             "side": trade_data["side"],
-                            "price": float(
-                                trade_data["price"] or trade_data["fills"][0]["price"]
-                            ),
+                            "price": self.get_price(),
                             "quantity": float(trade_data["executedQty"]),
                             "status": trade_data["status"],
-                        }
+                        },
+                        indent=4,
                     )
                     + "\n"
                 )

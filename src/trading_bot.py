@@ -35,7 +35,7 @@ class TradingBot:
             post (dict): Post data to analyze and process
         """
         if self.post_repository.is_post_processed(post):
-            print(f"Post already processed. Skipping: {post['content']}...")
+            print(f"Post already processed. Skipping: {post['content'][:60]}, {"..."}")
             return
         sentiment_analyzer = TradingSignalAnalyzer(post)
         sentiment_analyzer.analyze_signal()
@@ -53,15 +53,14 @@ class TradingBot:
                 )
                 return
 
-            print(trader.get_price())
             if sentiment_analyzer.trade_signal == "LONG":
-                trader.place_buy_order(0.001)
+                trader.place_buy_order(0.01)
                 print("Buy order placed.")
             elif sentiment_analyzer.trade_signal == "SHORT":
-                # trader.place_sell_order()
-                print("Sell order not implemented yet.")
+                trader.place_sell_order(0.01)
+                print("Sell order placed.")
         except Exception as e:
-            print(f"Error processing post: {e}")
+            print(f"Error executing trade: {e}")
         finally:
             self.post_repository.mark_post_as_processed(post)
 

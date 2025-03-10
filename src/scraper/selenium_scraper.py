@@ -115,7 +115,7 @@ class SeleniumScraper(BaseScraper):
                     # Extract the aria-label attribute (contains all post info)
                     tweet_elem = status.find_element(By.XPATH, "./div[@aria-label]")
                     tweet_text = tweet_elem.get_attribute("aria-label").strip()
-                    # tweet_text = "BUY BITCOIN NOW"
+                    # tweet_text = "BUY Ethereum NOW you idiots"
                     content_hash = hashlib.md5(f"{tweet_text}".encode()).hexdigest()
                     post_id = f"{content_hash}"
 
