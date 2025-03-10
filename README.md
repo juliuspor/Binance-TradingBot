@@ -1,12 +1,14 @@
 # Binance-TradingBot
 
-LLM-powered crypto trading bot that trades based on Donald Trumps posts.
+LLM-powered crypto trading bot that trades based on Donald Trump's Truth Social posts.
 
 ## What it does
-- Scrapes Trump's Truth Social posts in real-time
-- translates his posts sentiment to trading signals using Groq's API
-- Executes trades on Binance when signals are detected
-- Tracks performance with trade metrics
+- Scrapes Trump's Truth Social posts in real-time using Selenium
+- Analyzes posts for crypto-related content and sentiment using Groq's API
+- Generates trading signals (LONG/SHORT) based on the sentiment analysis
+- Executes trades on Binance when actionable signals are detected
+- Tracks performance and prevents duplicate processing of posts
+- Runs on a 60-second polling schedule to check for new posts
 
 ## Quick start
 
@@ -20,14 +22,30 @@ cp .env.example .env  # Add your API keys here
 docker-compose up -d
 ```
 
+## Environment Variables
+Create a `.env` file with the following variables:
+
+```
+BINANCE_API_KEY=your_binance_api_key
+BINANCE_SECRET_KEY=your_binance_secret_key
+TRUTHSOCIAL_USERNAME=your_truthsocial_username
+TRUTHSOCIAL_PASSWORD=your_truthsocial_password
+GROQ_API_KEY=your_groq_api_key
+```
+
+## Docker Setup
+The application runs in a Docker container with:
+- Python 3.12
+- Chromium browser for headless scraping
+- Persistent data storage in the mounted `./data` directory
+- Auto-restart 
+
 ## Stack
 - Python 3.12
-- Selenium for scraping
-- Binance API for trading
-- Groq API for sentiment analysis (You can choose the LLM)
-- Docker for deployment
 
 ## Notes
 - Runs on Binance testnet by default
-- Data persists in ./data directory
+- Data persists in ./data directory between container restarts
+- Currently places small (0.01 unit) trades when signals are detected
 - Configurable via environment variables
+- Posts are tracked to prevent duplicate processing
