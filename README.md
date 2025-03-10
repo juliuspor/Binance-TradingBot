@@ -15,7 +15,7 @@ LLM-powered crypto trading bot that trades based on Donald Trump's Truth Social 
 # Clone & configure
 git clone https://github.com/juliuspor/Binance-TradingBot.git
 cd Binance-TradingBot
-cp .env.example .env  # Add your API keys here
+nano .env  # Add your API keys here
 
 # Launch with Docker 
 docker-compose up -d
