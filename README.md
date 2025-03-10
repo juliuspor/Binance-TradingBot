@@ -1,25 +1,33 @@
-# Binance Trading Bot
+# Binance-TradingBot
 
-Automated cryptocurrency trading bot that:
-- Scrapes Donald Trump's posts from Truth Social using either `truthbrush` or `Selenium` (You can choose)
-- Analyzes trading signal with Groq's API (Different LLMs possible)
-- Executes trades on Binance testnet based on LLM trading signal analysis
+LLM-powered crypto trading bot that trades based on Donald Trumps posts.
 
-## Requirements
-- Python 3.9+
-- A `Binance` account with API access enabled
-- API key for Groq 
+## What it does
+- Scrapes Trump's Truth Social posts in real-time
+- translates his posts sentiment to trading signals using Groq's API
+- Executes trades on Binance when signals are detected
+- Tracks performance with trade metrics
 
-## Installation and Usage
-```sh
+## Quick start
+
+```bash
+# Clone & configure
 git clone https://github.com/juliuspor/Binance-TradingBot.git
 cd Binance-TradingBot
-pip install -r requirements.txt
+cp .env.example .env  # Add your API keys here
 
-# Configure API keys in .env file
-cp .env.example .env
-# Edit .env with your API keys
-
-# Start the bot
-python src/main.py
+# Launch with Docker 
+docker-compose up -d
 ```
+
+## Stack
+- Python 3.12
+- Selenium for scraping
+- Binance API for trading
+- Groq API for sentiment analysis (You can choose the LLM)
+- Docker for deployment
+
+## Notes
+- Runs on Binance testnet by default
+- Data persists in ./data directory
+- Configurable via environment variables
